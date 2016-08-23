@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 EAPI=6
-inherit eutils cmake-utils
+inherit eutils cmake-utils fdo-mime
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
@@ -78,8 +78,13 @@ src_configure() {
 }
 
 pkg_postinst() {
+	fdo-mime_desktop_database_update
 	if ! use pulseaudio && ! use jack; then
 		ewarn "It is suggested you enable either JACK or PulseAudio,"
 		ewarn "or you will not have audio capture capability."
 	fi
+}
+
+pkg_postrm() {
+	fdo-mime_desktop_database_update
 }
